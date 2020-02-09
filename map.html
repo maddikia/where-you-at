@@ -1,0 +1,88 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Google Maps Example</title>
+    <script src="https://cdn.pubnub.com/sdk/javascript/pubnub.4.19.0.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h1>Where you at? - Live Map Marker</h1>
+      <div id="map-canvas" style="width:600px;height:400px"></div>
+    </div>
+
+    <script>
+    window.lat = 42.360092;
+    window.lng = -71.094162;
+
+    function circlePoint(time) {
+      var radius = 0.01;
+      var x = Math.cos(time) * radius;
+      var y = Math.sin(time) * radius;
+      
+      return {lat:window.lat + x, lng:window.lng + y};
+    };
+
+    var map;
+    var mark;
+    //var lineCoords = [];
+
+
+    var initialize = function() {
+      map  = new google.maps.Map(document.getElementById('map-canvas'), {center:{lat:lat,lng:lng},zoom:12});
+      mark = new google.maps.Marker({position:{lat:lat, lng:lng}, map:map});
+    };
+
+    window.initialize = initialize;
+
+   /* var redraw = function(payload) {
+      lat = payload.message.lat;
+      lng = payload.message.lng;
+
+      map.setCenter({lat:lat, lng:lng, alt:0});
+      mark.setPosition({lat:lat, lng:lng, alt:0});
+      
+      //lineCoords.push(new google.maps.LatLng(lat, lng));
+      
+      var lineCoordinatesPath = new google.maps.Polyline({
+      path: lineCoords,
+      geodesic: true,
+      strokeColor: '#2E10FF'
+    };*/
+
+    var pnChannel = "map-channel";
+
+    var pubnub = new PubNub({
+      publishKey:   'pub-c-ade30bfe-daed-4c0f-b4fc-25ff52e4c037',
+      subscribeKey: 'sub-c-a8aa07d8-4b54-11ea-814d-0ecb550e9de2'
+    });
+
+    pubnub.subscribe({channels: [pnChannel]});
+    pubnub.addListener({message:redraw});
+
+    setInterval(function() {
+      pubnub.publish({channel:pnChannel, message:{lat:window.lat + 0.001, lng:window.lng + 0.01}});
+      }, 500);
+      
+    function getLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(updatePosition);
+    }
+    return null;
+    };
+      
+    function updatePosition(position) {
+      if (position) {
+          window.lat = position.coords.latitude;
+          window.lng = position.coords.longitude;
+        }
+      }
+      setInterval(function(){updatePosition(getLocation());}, 10000);
+      function currentLocation() {
+        return {lat:window.lat, lng:window.lng};
+      };
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&key=AIzaSyCw2-ssBm1wxCxfcuHLi9Q87mMmoVjjcc8&callback=initialize"></script>
+  </body>
+</html>
