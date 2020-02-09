@@ -14,6 +14,7 @@ $(document).ready(function() {
         const password = $('#passlogin').val();
         $.post('/login', {
             username: username,
+            password: password,
         }).done(function () {
             document.location.reload();
         });
