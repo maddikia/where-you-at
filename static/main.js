@@ -7,7 +7,17 @@
                 document.location.reload();
             });
         });
-        $('#addpoints').click(function() {
+        $('#quest').click(function() {
+            const description = $('#description').val();
+            const value = $('#value').val();
+            $.post('/quest', {
+                description: description,
+                value: value
+            }).done(function() {
+                document.location.reload();
+            });
+        });
+        $('.addpoints').click(function() {
             $.post('/addpoints', {
             }).done(function() {
                 document.location.reload();
@@ -18,12 +28,12 @@
                 document.location.reload();
             });
         });
-        $('#listedquest').click(function() {
+        /*$('#listedquest').click(function() {
             const value = $('#listedquest').val();
             $.post('/endquest', {
                 value: value
             }).done(function() {
                 document.location.reload();
             });
-        });
+        });*/
     });

@@ -21,13 +21,11 @@
         {% endif %}
     {% endfor %}
     <button id="logout">Logout</button>
-    <button id="addpoints">Add Points</button>
     <input id="description" type="text" placeholder="Short Quest Description">
     <input id="value" type="number" placeholder="Quest Value">
     <button id="quest">Add Quest</button>
     {% for quest in quests %}
-            <p>{{ quest['description'] }}</p>
-            <input type="submit" id="listedquest" name="value" value="{{quest['value']}}"/>
+            <button type="submit" class="addpoints">[{{quest['value']}}] {{ quest['description'] }}</button>
     {% endfor %}
     {% endif %}
 </body>

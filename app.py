@@ -5,7 +5,7 @@ from pymongo import MongoClient
 app = Flask(__name__)
 app.secret_key = '12riddlemarvolo311926'
 
-client = MongoClient("mongodb+srv://maddikia:lol@cluster0-3l4ee.mongodb.net/test?retryWrites=true&w=majority")
+client = MongoClient("mongodb+srv://maddikia:rm549000@cluster0-3l4ee.mongodb.net/test?retryWrites=true&w=majority")
 db = client['whereyouat']
 quests = db['quests']
 users = db['users']
@@ -39,19 +39,10 @@ def logout():
     session.pop('username', None)
     return 'success'
 
-@app.route('/endquest', methods=['POST'])
-def endquest():
-    value = int(request.form['listedquest'])
-    users.update_one({'username':session['username']}, {'$inc': {'points': value}})
-   # points = #code 
-   # quests.delete_one({"description": description})
-
 @app.route('/addpoints', methods=['POST'])
 def addpoints():
-    points = 5
-    users.update_one({'username':session['username']}, {'$inc': {'points': points}})
-    
-    
+    value = 5
+    users.update_one({'username':session['username']}, {'$inc': {'points': value}}) 
 
 app.run(port=3000, debug=True, host='0.0.0.0')
 
