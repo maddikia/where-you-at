@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<head>
+    <title>Chatbot</title>
+    <script
+        src="https://code.jquery.com/jquery-3.4.1.min.js"
+        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+        crossorigin="anonymous"></script>
+    <script src="{{ url_for('static', filename='main.js') }}"></script>
+</head>
+<body>
+    <h1>Chatbot</h1>
+    {% if not loggedIn %}
+    <h3>Register</h3>
+    <input id="regusername" type="text" placeholder="username" />
+    <label for="regpassword">Password: </label>
+    <input id="regpassword" type="password" />
+    <label for="regconfirmpassword">Confirm Password: </label>
+    <input id="regconfirmpassword" type="password" />
+    <button id="register">register</button>
+    <h3>Login</h3>
+    <input id="username" type="text" placeholder="username" />
+    <button id="login">login</button>
+    {% else %}
+    <h3>Post</h3>
+    <p>Hello {{username}}</p>
+    <button id="logout">logout</button>
+    <input id="message" type="text" placeholder="Enter a string" />
+    <button id="submit">send</button>
+    {% endif %}
+    <h2>Feed</h2>
+    <div>
+        {% for message in messages %}
+        <p>[{{message['ts']}}] {{ message['message'] }}</p>
+        {% endfor %}
+    </div>
+</body>
