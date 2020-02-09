@@ -31,10 +31,11 @@ def register():
 def login():
     username = request.form['userlogin']
     password = request.form['passlogin']
+    if (users.count_documents({'username': username, 'password': password}) < 1):
+        return 'failure'
     if (users.count_documents({'username': username, 'password': password}) > 0):
-        session['username'] = request.form['username']
+        session['username'] = username
         return 'success'
-    return 'success'
 
 @app.route('/logout', methods=['POST'])
 def logout():
@@ -50,3 +51,4 @@ def message():
 
 if __name__ == '__main__':
     app.run(port=3000, debug=True, host='0.0.0.0')
+
