@@ -29,7 +29,11 @@ def register():
 
 @app.route('/login', methods=['POST'])
 def login():
-    session['username'] = request.form['username']
+    username = request.form['userlogin']
+    password = request.form['passlogin']
+    if (users.count_documents({'username': username, 'password': password}) > 0):
+        session['username'] = request.form['username']
+        return 'success'
     return 'success'
 
 @app.route('/logout', methods=['POST'])

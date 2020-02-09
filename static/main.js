@@ -1,11 +1,7 @@
 $(document).ready(function() {
     $('#register').click(function() {
-        const username = $('#regusername').val();
-        const password = $('#regpassword').val();
-        const confirmPassword = $('#regconfirmpassword').val();
-        if (password != confirmPassword) {
-            return;
-        }
+        const username = $('#username').val();
+        const password = $('#password').val();
         $.post('/register', {
             username: username,
             password: password,
@@ -14,7 +10,8 @@ $(document).ready(function() {
         });
     })
     $('#login').click(function() {
-        const username = $('#username').val();
+        const username = $('#userlogin').val();
+        const password = $('#passlogin').val();
         $.post('/login', {
             username: username,
         }).done(function () {

@@ -11,19 +11,18 @@
     <h1>Chatbot</h1>
     {% if not loggedIn %}
     <h3>Register</h3>
-    <input id="regusername" type="text" placeholder="username" />
+    <input id="username" type="text" placeholder="Username" />
     <label for="regpassword">Password: </label>
-    <input id="regpassword" type="password" />
-    <label for="regconfirmpassword">Confirm Password: </label>
-    <input id="regconfirmpassword" type="password" />
-    <button id="register">register</button>
+    <input id="password" type="Password" />
+    <button id="register">Register</button>
     <h3>Login</h3>
-    <input id="username" type="text" placeholder="username" />
-    <button id="login">login</button>
+    <input id="userlogin" type="text" placeholder="Username" />
+    <input id="passlogin" type="password" placeholder="Password" />
+    <button id="login">Login</button>
     {% else %}
     <h3>Post</h3>
     <p>Hello {{username}}</p>
-    <button id="logout">logout</button>
+    <button id="logout">Logout</button>
     <input id="message" type="text" placeholder="Enter a string" />
     <button id="submit">send</button>
     {% endif %}
