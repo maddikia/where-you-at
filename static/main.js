@@ -2,7 +2,7 @@
         $('#login').click(function() {
             const username = $('#username').val();
             $.post('/login', {
-                username: username,
+                username: username
             }).done(function() {
                 document.location.reload();
             });
