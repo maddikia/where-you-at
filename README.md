@@ -10,3 +10,6 @@ In many urban areas in the US, the number of people per day who go outside and a
 # Overview
 
 The app uses the google maps API to track users and verify that they have reached a 'hotspot'. All players in a given region compete on a leaderboard for cosmetic prizes e.g. new avatars or gui reskins.
+
+# Watch (some of) our code in action!
+LINK: https://youtu.be/IS9EtcwsLoU
