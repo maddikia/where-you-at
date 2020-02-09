@@ -2,53 +2,56 @@ from flask import Flask, render_template, request, session
 import datetime
 from pymongo import MongoClient
 
-client = MongoClient("mongodb://localhost:27017")
-db = client['simonbryn']
-messages = db['messages']
-users = db['users']
 app = Flask(__name__)
-app.secret_key = 'PizzlyBear'
+app.secret_key = '12riddlemarvolo311926'
+
+client = MongoClient("mongodb+srv://maddikia:lol@cluster0-3l4ee.mongodb.net/test?retryWrites=true&w=majority")
+db = client['whereyouat']
+quests = db['quests']
+users = db['users']
 
 @app.route('/', methods=['GET'])
 def home():
-    return render_template('index.html', 
-        messages=messages.find({}),
-        loggedIn=('username' in session),
-        username=session.get('username', '')
-    )
+    return render_template('index.html',
+        quests = quests.find({}),
+        loggedIn = ('username' in session),
+        username = session.get('username', ''),
+        points = session.get('points', 0),
+        users = users.find({}))
 
-@app.route('/register', methods=['POST'])
-def register():
-    username = request.form['username']
-    password = request.form['password']
-    if (users.count_documents({'username': username}) > 0):
-        return 'failure'
-    users.insert_one({'username': username, 'password': password})
-    session['username'] = username
+@app.route('/quest', methods=['POST'])
+def quest():
+    description = request.form['description']
+    value = request.form['value']
+    quests.insert_one({'description': description, 'author': session['username'], 'value': value})
     return 'success'
 
 @app.route('/login', methods=['POST'])
 def login():
-    username = request.form['userlogin']
-    password = request.form['passlogin']
-    if (users.count_documents({'username': username, 'password': password}) < 1):
-        return 'failure'
-    if (users.count_documents({'username': username, 'password': password}) > 0):
-        session['username'] = username
-        return 'success'
+    session['username'] = request.form['username']
+    if (users.count_documents({'username': session['username']}) < 1):
+        now = datetime.datetime.now().strftime("%m/%d/%Y %H:%M:%S")
+        users.insert_one({'username': session['username'], 'creation_time': now, 'points': 0})
+    return 'success'
 
 @app.route('/logout', methods=['POST'])
 def logout():
     session.pop('username', None)
     return 'success'
 
-@app.route('/message', methods=['POST'])
-def message():
-    message = session['username'] + ": " + request.form['message']
-    now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    messages.insert_one({'message': message, 'ts': now})
-    return 'success'
+@app.route('/endquest', methods=['POST'])
+def endquest():
+    value = int(request.form['listedquest'])
+    users.update_one({'username':session['username']}, {'$inc': {'points': value}})
+   # points = #code 
+   # quests.delete_one({"description": description})
 
-if __name__ == '__main__':
-    app.run(port=3000, debug=True, host='0.0.0.0')
+@app.route('/addpoints', methods=['POST'])
+def addpoints():
+    points = 5
+    users.update_one({'username':session['username']}, {'$inc': {'points': points}})
+    
+    
+
+app.run(port=3000, debug=True, host='0.0.0.0')
 
